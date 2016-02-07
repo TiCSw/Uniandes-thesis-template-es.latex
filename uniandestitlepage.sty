@@ -1,0 +1,298 @@
+% LaTeX title page for papers published at the Vrije Universiteit
+% Copyright (c) 2007 Thomas De Schampheleire
+%
+%     This program is free software; you can redistribute it and/or
+%     modify it under the terms of the GNU General Public License
+%     as published by the Free Software Foundation; either version 2
+%     of the License, or (at your option) any later version.
+%
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+%
+%     You should have received a copy of the GNU General Public License
+%     along with this program; if not, write to the Free Software
+%     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%
+% This package is based on an implementation of the thesis title page by
+% Toon Verwaest, but has been modified to be more generic and useful for
+% normal papers as well.
+%
+%
+% Installation:
+% --------------------------------------------------------------------------
+% This package needs the following files:
+%   - vubtitlepage.sty (the actual package)
+%   - VUB_logo.png
+%   - VUB_schild_nontransparent.png
+%
+% There are several places where you can put the files:
+%   1. Copy the files directly with the other tex-files of your report
+%   2. Create a tex directory structure in your home directory where you
+%      can put custom packages. Create:
+%           /home/<user>/texmf/tex/latex/vubtitlepage/
+%      and copy the files to this directory. Now TeX should be notified
+%      of these changes, by running:
+%      $ texhash
+%      or
+%      $ mktexlsr
+%      which will create an ls-R file in the created directory.
+%   3. Put the files in the system-wide tex directory:
+%      /usr/share/texmf/tex/latex/vubtitlepage/
+%      You will also need to run texhash or mktexlsr.
+%
+%
+% Usage:
+% --------------------------------------------------------------------------
+% First include the package:
+%     \usepackage{vubtitlepage}
+%
+% Then define the fields you need, for example:
+%     \faculty{Faculteit Ingenieurswetenschappen}
+%     \date{2007-01-10}
+%     \sectone{Power Management in Operating Systems}
+%     \secttwo{Thomas De Schampheleire}
+%     \sectthree{
+%         Operating Systems \& Security \\
+%         5E Burgerlijk Elektrotechnisch Ingenieur \\
+%         Prof. M. Timmerman
+%     }
+%     \sectfour{2006-2007}
+%
+% Finally, make the title like usual:
+%     \begin{document}
+%         \maketitle
+%         ....
+%     \end{document}
+%
+%
+% Options:
+% --------------------------------------------------------------------------
+% This package has several options. To use an option, specify it between
+% brackets in the \usepackage command. Multiple options are separated with
+% a comma:
+%   \usepackage[option1,option2]{vubtitlepage}
+%
+% The following options are defined:
+%   foursections: adds an extra line and section
+%   centersections: vertically center the sections on the title page
+%
+%
+% Other configuration:
+% --------------------------------------------------------------------------
+% You can change the default font sizes of the different sections as well.
+% The default sizes are 30pt for section one, 24pt for section 2 and 20pt
+% for section three and four. If you think this is ok, you do NOT have to
+% include the following commands
+%     \sectonesize{30pt}
+%     \secttwosize{24pt}
+%     \sectthreesize{20pt}
+%     \sectfoursize{20pt}
+%
+% You can also change the font skip value for each section, which is the
+% vertical spaces between lines. By default the skip value equals the font
+% size. If you think the lines are too close to each other, you can try to
+% change these.
+%     \sectoneskip{35pt}
+%     \sectthreeskip{24pt}
+%
+%
+% Changelog:
+% --------------------------------------------------------------------------
+% 2006-12-20: (Initial changes to the code of Toon Verwaest)
+%   - used the textpos package to absolutely position pictures and date
+% 2007-01-02:
+%   - absolute positioning of all elements according to the VUB style book,
+%     except for the sections which need to be able to grow. This makes
+%     the package work both with or without the a4wide package.
+%   - made the font sizes of the title sections adjustable
+%   - added an option for an extra section (foursections)
+%   - use of helvetica is now local instead of global, which makes it
+%     possible to do a \maketitle in a document, without seeing the whole
+%     document change font.
+% 2007-01-03:
+%   - made the font skip value adjustable as well
+%   - replaced VUB_schild.png with a non-transparent version, since the
+%     transparent one printed ugly on my printer.
+% 2007-01-07:
+%   - used textblock* instead of textblock, which allows direct absolute
+%     positioning, instead of using TPHorizModule en TPVertModule
+%   - Changed the reference point of the date block to the bottom-left
+% 2007-01-08:
+%   - added an option centersections, which vertically centers the
+%     section-blocks on the page. If not specified, the sections start
+%     at a fixed position from the top of the page, complying with the
+%     VUB style handbook
+%   - cleaned this help a bit
+%
+% --------------------------------------------------------------------------
+% If you have questions, contact <thomas.de.schampheleire@gmail.com>
+%
+
+\ProvidesPackage{uniandestitlepage}[2007/01/07 Title page for papers published at the Vrije Universiteit Brussel]
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{graphicx}
+\RequirePackage[absolute,overlay]{textpos}
+
+%Package options
+\DeclareOption{foursections}{\@foursectionstrue}
+\DeclareOption{centersections}{\@centersectionstrue}
+\DeclareOption*{%
+    \PackageWarning{uniandestitlepage}{Unknown option `\CurrentOption'}%
+}
+
+\newif\if@foursections \newif\if@centersections
+\@foursectionsfalse
+\@centersectionsfalse
+
+\ProcessOptions\relax
+
+%Define fields that can be modified
+\gdef\@sectone{}
+\gdef\@secttwo{}
+\gdef\@sectthree{}
+\gdef\@sectfour{}
+\gdef\@sectonesize{35pt}
+\gdef\@secttwosize{30pt}
+\gdef\@sectthreesize{24pt}
+\gdef\@sectfoursize{24pt}
+\gdef\@sectoneskip{\@sectonesize}
+\gdef\@secttwoskip{\@secttwosize}
+\gdef\@sectthreeskip{\@sectthreesize}
+\gdef\@sectfourskip{\@sectfoursize}
+
+\def\sectone#1{\gdef\@sectone{#1}}
+\def\secttwo#1{\gdef\@secttwo{#1}}
+\def\sectthree#1{\gdef\@sectthree{#1}}
+\def\sectfour#1{\gdef\@sectfour{#1}}
+\def\sectonesize#1{\gdef\@sectonesize{#1}}
+\def\secttwosize#1{\gdef\@secttwosize{#1}}
+\def\sectthreesize#1{\gdef\@sectthreesize{#1}}
+\def\sectfoursize#1{\gdef\@sectfoursize{#1}}
+\def\sectoneskip#1{\gdef\@sectoneskip{#1}}
+\def\secttwoskip#1{\gdef\@secttwoskip{#1}}
+\def\sectthreeskip#1{\gdef\@sectthreeskip{#1}}
+\def\sectfourskip#1{\gdef\@sectfourskip{#1}}
+
+
+%Start title page
+\renewcommand{\maketitle}{
+\begin{titlepage}
+
+    \enlargethispage*{1000pt}
+
+    {\fontfamily{phv}\selectfont
+
+        %Uniandes logo
+        \begin{center}
+            \includegraphics[width=58.2mm]{images/uniandes.pdf}
+		\end{center}
+
+        %Faculty/Department
+        \begin{textblock*}{150mm}(53mm,90mm)
+            \footnotesize{\parbox[t]{425pt}{\centerline{\MakeUppercase{\textbf{UNIVERSIDAD DE LOS ANDES}}}}~\\}
+						\footnotesize{\indent\parbox[t]{425pt}{\centerline{FACULTAD DE INGENIER\'{I}A}}~\\}
+            \footnotesize{\indent\parbox[t]{425pt}{\centerline{Departamento de Sistemas y Computaci\'{o}n}}~\\}
+            \footnotesize{\indent\parbox[t]{425pt}{\centerline{Grupo de construcci\'{o}n de software}}}
+        \end{textblock*}
+
+			
+        %Main section
+        \if@centersections
+            \begin{textblock*}{0mm}[0,0.5](50mm,180mm)
+        \else
+            \begin{textblock*}{0mm}(25mm,100mm)
+        \fi
+
+	        %DIVIDER
+                 \begin{tabular*}{153mm}{c}
+                      ~\\  \hline  ~
+                 \end{tabular*}
+
+                %Section one: Title
+                {\fontsize{\@sectonesize}{\@sectoneskip}\selectfont\parbox{153mm}{{\@sectone}}}
+						
+	        %DIVIDER
+                \begin{tabular*}{153mm}{c}
+                        ~\\ \hline ~
+                 \end{tabular*}
+
+                %Section two: Author
+                {\fontsize{\@secttwosize}{\@secttwoskip}\selectfont\parbox{153mm}{{\@secttwo}}}\\
+
+
+                %Section three: Subtitle                               
+                {\fontsize{\@sectthreesize}{\@sectthreeskip}\selectfont\parbox{153mm}{{\@sectthree}~\\}}
+
+
+                %Section four: Date
+                {\fontsize{\@sectthreesize}{\@secttwoskip}\selectfont\parbox{153mm}{{\@sectfour}}}\\
+
+       \end{textblock*}
+
+
+        %Date and possibly other text: [0,1] changes the reference point to the bottom-left of the block
+        \begin{textblock*}{100mm}[0,1](85mm,270mm)
+                \normalsize{\@date}
+        \end{textblock*}
+
+
+%	\begin{textblock*}{100mm}[0,1](120mm,265mm)
+%                \small{\begin{tabular}{ll}
+%								\textbf{Jury:}\\
+%								Prof. Dr. Mar\'{i}a Cecilia Bastarrica \\
+%								Prof. Dr. Alfonso Pierantonio \\
+%								Prof. Dr. Jorge Villalobos \\
+%								Prof. Dr. Dario Correal \\
+%								Prof. Dr. Wolfgang De Meuter \\
+%								Prof. Dr. Beat Signer \\
+%								\end{tabular}\\~}
+%        \end{textblock*}
+
+        %University crest
+        % \begin{textblock*}{0mm}(138mm,229mm)
+        %             \includegraphics[width=43mm,height=43mm]{VUB_schild_nontransparent.png}
+        %         \end{textblock*}
+
+    } %helvetica
+
+    \pagebreak ~
+
+\end{titlepage}
+} %maketitle
+
+
+
+
+%BACKUP
+%The code below works, but uses absolute positions for the horizontal lines and sections as well, according to the official university style. This, however, does not take into account that titles can be long...
+%         %Bigtitle
+%         \begin{textblock}{}({48mm \divide \TPHorizModule},{100mm \divide \TPVertModule})
+%             %\parbox{140mm}{\Huge{\@title}}
+%             \parbox{140mm}{\fontsize{35pt}{35pt}\selectfont\MakeUppercase{\@title}}
+%         \end{textblock}
+%
+%         %Horizontal line 1
+%         \begin{textblock}{}({38.5mm \divide \TPHorizModule},{130mm \divide \TPVertModule})
+%             \begin{tabular*}{161.5mm}{l}
+%                 \hline \\
+%             \end{tabular*}
+%         \end{textblock}
+%
+%         \begin{textblock}{}({48mm \divide \TPHorizModule},{137mm \divide \TPVertModule})
+%             \parbox{140mm}{\fontsize{24pt}{30pt}\selectfont\@subtitle}
+%         \end{textblock}
+%
+%         %Horizontal line 2
+%         \begin{textblock}{}({38.5mm \divide \TPHorizModule},{150mm \divide \TPVertModule})
+%             \begin{tabular*}{161.5mm}{l}
+%                 \hline \\
+%             \end{tabular*}
+%         \end{textblock}
+%
+%         %Author
+%         \begin{textblock}{}({48mm \divide \TPHorizModule},{158mm \divide \TPVertModule})
+%             \parbox{140mm}{\fontsize{20pt}{30pt}\selectfont\@author}
+%         \end{textblock}

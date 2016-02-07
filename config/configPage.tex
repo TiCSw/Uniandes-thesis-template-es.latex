@@ -1,0 +1,57 @@
+
+%\usepackage[papersize={17cm,24cm},inner=17mm,outer=17mm,top=20mm,bottom=20mm,includehead]{geometry}
+
+\setmarginsrb  { 1.5in}  % left margin
+                        { 0.8in}  % top margin
+                        { 1.5in}  % right margin
+                        { 0.8in}  % bottom margin
+                        {  14pt}  % head height
+                        {0.25in}  % head sep
+                        {   9pt}  % foot height
+                        { 0.3in}  % foot sep
+
+% CONFIGURE CHAPTER TITLES
+\usepackage[palatino]{quotchap}
+
+% \usepackage[Lenny]{fncychap}
+% \ChNameVar{\fontsize{14}{16}\usefont{OT1}{phv}{m}{n}\selectfont} 
+% \ChNumVar{\fontsize{60}{62}\usefont{OT1}{ptm}{m}{n}\selectfont} 
+% \ChTitleVar{\Huge\bfseries\rm}
+% \ChRuleWidth{1pt}
+
+% CONFIGURE SECTION TITLES
+\usepackage[calcwidth]{titlesec}
+\titleformat
+{\section}[hang]{\sffamily\bfseries}
+ {\Large\thesection}{12pt}{\Large}
+ 
+
+% CONFIGURE PAGE HEADERS
+\fancyhead{} % clear all header fields 
+\fancyhead[RO,LE]{\thepage} 
+\fancyhead[LO]{\headerChapterTitle} 
+\fancyhead[RE]{\headerSectionTitle} 
+\fancyfoot{} % clear all footer fields 
+\fancyfoot[C]{} 
+
+\renewcommand{\headrulewidth}{0.8pt} 
+
+% Format the table of contents
+\renewcommand{\contentsname}{Table of Contents} 
+\renewcommand{\cfttoctitlefont}{ \hfill \huge}
+\renewcommand{\cftloftitlefont}{ \hfill \huge }
+\renewcommand{\cftlsttitlefont}{ \hfill \huge }
+\renewcommand{\cftlottitlefont}{ \hfill \huge }
+
+\newcommand{\shortChapterTitle}{\leftmark}
+\newcommand{\headerSectionTitle}{\nouppercase{\rightmark}}
+\newcommand{\headerChapterTitle}{\nouppercase{\shortChapterTitle}}
+
+% CONFIGURE FIGURE CAPTIONS
+\DeclareCaptionFont{ssblack}{\sffamily}
+\DeclareCaptionFormat{figure}{\textbf{#1}~~#3}
+\captionsetup[figure]{format=figure,labelfont=ssblack, textfont=ssblack, singlelinecheck=false, justification=centering}
+
+% CONFIGURE TABLE CAPTIONS
+\DeclareCaptionFormat{table}{\textbf{#1}~~#3}
+\captionsetup[table]{format=table,labelfont=ssblack, textfont=ssblack, singlelinecheck=false, justification=centering}

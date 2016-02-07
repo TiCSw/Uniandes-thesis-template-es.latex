@@ -1,0 +1,29 @@
+\usepackage{graphicx}
+\usepackage[applemac]{inputenx} % This is required to support characters in spanish
+\usepackage[T1]{fontenc} % This is required to have small-bold-capitals
+\usepackage[plainpages=false]{hyperref}
+\usepackage{fancyhdr} % This is required to have nice headers and footers
+%\usepackage{setspace}
+\usepackage{framed} % This is required to have framed comments
+\usepackage{color} % This defines colors that can be used in the text
+\usepackage{soul} % This allows the usage of \hl to highlight text
+\usepackage{tocloft} % This is required to have custom lists of .....
+\usepackage{comment} % This is required to remove specific environments
+\usepackage[font=small,format=plain,labelfont=bf,up,up]{caption}
+\usepackage{vmargin} % This is required to modify the margins of the page
+\usepackage{caption}
+\usepackage[centersections]{uniandestitlepage}
+\usepackage{ifthen}
+\usepackage{array}
+
+
+% Show Comments? Show Todos?
+\newboolean{showComments}
+\newboolean{showTodos}
+\setboolean{showComments}{false}
+\setboolean{showTodos}{false}
+
+
+\input{config/newCommands}
+\input{config/listingsConf}
+\input{config/configPage}

@@ -1,0 +1,45 @@
+\documentclass[11pt,twoside]{report}
+\include{config/config}
+
+\begin{document}
+
+\include{other/title} %Title Page
+\cleardoublepage
+
+\newpage
+\thispagestyle{empty}
+
+\cleardoublepage
+\pagestyle{fancy}
+\pagenumbering{roman}
+
+\include{other/abstract} %Abstract
+\include{other/abstractS} %Resumen
+\include{other/acknowledgements} % Acknowledgements
+\include{other/tables} % Tables
+
+
+% Remove 'Chapter #' from the header
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}} 
+
+% CONTENTS
+% \cleardoublepage
+\pagenumbering{arabic}
+
+\include{chapter1/chapter1}
+\include{chapter2/chapter2}
+\include{chapter3/chapter3}
+\include{chapter4/chapter4}
+\include{chapter5/chapter5}
+\include{chapter6/chapter6}
+\include{chapter7/chapter7}
+
+\appendix
+\include{appendix/appendices}
+
+% BIBLIOGRAPHY
+\include{other/bibliography}
+
+\end{document}
+

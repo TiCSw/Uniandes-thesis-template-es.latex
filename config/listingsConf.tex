@@ -1,0 +1,132 @@
+\usepackage{listings}
+\usepackage{color}
+\definecolor{darkgray}{rgb}{0.35,0.35,0.35}
+\definecolor{navgray}{rgb}{0.85,0.85,0.85}
+
+
+\DeclareCaptionFont{white}{\sffamily\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.0, 0.0, 0.0,0.45}{\parbox{0.985\columnwidth}{\hspace{7pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+
+% Basic definition of a listing
+\lstset{ 
+basicstyle= \fontfamily{pcr}\selectfont\scriptsize,       	% the size of the fonts that are used for the code
+stringstyle=\color{darkgray}\slshape\bfseries,
+keywordstyle=\bfseries, 		% style of normal keywords
+keywordstyle={[2]\underbar}, 	% style of second set of keywords
+identifierstyle=,				% nothing happens 
+showtabs=false,                 		% show tabs within strings adding particular underscores
+tabsize=2,	                			% sets default tabsize to 2 spaces
+showspaces=false,               	% show spaces adding particular underscores
+showstringspaces=false,		% show spaces in strings
+morestring=[b]",
+backgroundcolor=\color{white},  	% choose the background color. You must add \usepackage{color}
+numbers=left,                   		% where to put the line-numbers
+numberstyle=\tiny, %scriptsize,      	% the size of the fonts that are used for the line-numbers
+stepnumber=1,                   	% the step between two line-numbers.
+numbersep=3pt,                  	% how far the line-numbers are from the code
+frame=b, %single,	                		% adds a frame around the code
+captionpos=t, %b                   		% sets the caption-position to bottom
+xleftmargin=10pt,
+xrightmargin=6pt,
+framexleftmargin=10pt,
+framexrightmargin=5pt,
+framexbottommargin=3pt
+}
+
+% Definition of CCL
+\lstdefinelanguage{CCL}{
+morekeywords={assembly,new,on,Init, global,load,Instance,ActionLink,ModelInstanceCreation}, % Keywords
+morekeywords={[2]XTM,miniBPMN}, % Additional keywords
+morecomment=[l]{//},  % Configuration of comments
+morecomment=[s]{/*}{*/}
+}
+
+% Definition of Cumbia's XML
+\lstdefinelanguage{CumbiaXML}{
+language=XML,                % choose the language of the code
+morekeywords={}, % Keywords in these XMLS
+morekeywords={[2]extended_type,new_entity,new_state_machine,state_machine_extensions, add_intermediate_state,additional_state,additional_transition,source_event,before_event,after_event, new_relation,new_role,role_detail,new_event,action,add_actions,add_transition,actions,add_state,transition,incoming_transitions,outgoing_transitions,relation,metamodel,state_machine_reference,type_name,role,type,runtime,memory,data,metamodel_extensions,definition,model_structure,elements,connections,connection,element,state_machine,state,event}, % Elements
+keywordstyle={[2]\bfseries}, 	% style of second set of keywords
+morekeywords={[3]extends,name,entityClass,file,transitionName,enter_event,exit_event,source_name,source_state,event_name,cardinality,targetTypeName,interface,type,relationType,description,class,successor,initial_state,location,statemachine,abstract,version,root,modelName,relationName,sourceElement,targetElement,typeName}, % attributes
+keywordstyle={[3]}, 	% style of third set of keywords
+breaklines=true,                	% sets automatic line breaking
+breakatwhitespace=false,	% sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}	% configuration of comments
+}
+
+
+% List of listings
+\newcommand{\listListingsName}{List of Listings}
+\newlistof[chapter]{listings}{lst}{\listListingsName}
+	
+% DEFINE THE ``xmlcode'' ENVIRONMENT
+\lstnewenvironment{xmlcode}[2]
+{
+	\refstepcounter{listings}
+	\label{lst:#2}	
+	\addcontentsline{lst}{listings}{\protect\numberline {\thelistings} #1}
+	\lstset{language=CumbiaXML,breaklines=true,breakatwhitespace=false,caption=#1,float=phtb}
+}
+{
+}
+
+% DEFINE THE ``hxmlcode'' ENVIRONMENT
+\lstnewenvironment{hxmlcode}[2]
+{
+	\refstepcounter{listings}
+	\label{lst:#2}	
+	\addcontentsline{lst}{listings}{\protect\numberline {\thelistings} #1}
+	\lstset{language=CumbiaXML,breaklines=true,breakatwhitespace=false,caption=#1,float=h!t}
+}
+{
+}
+
+% DEFINE THE ``cclcode'' ENVIRONMENT
+\lstnewenvironment{cclcode}[2]
+{
+	\refstepcounter{listings}
+	\label{lst:#2}	
+	\addcontentsline{lst}{listings}{\protect\numberline {\thelistings} #1}
+	\lstset{language=CCL,caption=#1,breaklines=true,breakatwhitespace=false,float=phtb}
+}
+{
+}
+
+% DEFINE THE ``javacode'' ENVIRONMENT
+\lstnewenvironment{javacode}[2]
+{
+	\refstepcounter{listings}
+	\label{lst:#2}	
+	\addcontentsline{lst}{listings}{\protect\numberline {\thelistings} #1}
+	\lstset{language=Java,caption=#1,breaklines=true,breakatwhitespace=false,float=phtb}
+}
+{
+}
+
+
+% Definition of NavLang
+\lstdefinelanguage{NavLang}{
+backgroundcolor=\color{navgray},
+basicstyle= \fontfamily{pcr}\selectfont\scriptsize,
+morekeywords={\#,root,this,self,nil,isOfType}, % Keywords
+morecomment=[l]{//},  % Configuration of comments
+morecomment=[s]{/*}{*/},
+otherkeywords={::,&&,isNotNil\?,<!,>,->,\#},
+frame=none,
+numbers=none,                   		% remove line-numbers
+linewidth=0.95\columnwidth,
+xleftmargin=15pt
+}
+
+% DEFINE THE ``navcode'' ENVIRONMENT
+\lstnewenvironment{navcode}
+{
+	\lstset{language=NavLang,breaklines=true,breakatwhitespace=false}
+}
+{
+}
+
+\newcommand{\nav}[1]
+{\colorbox{navgray}{\lstinline[language=NavLang,breaklines=false,breakatwhitespace=false,basicstyle=\normalsize\ttfamily]$#1$}}

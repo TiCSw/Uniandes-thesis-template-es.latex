@@ -1,0 +1,146 @@
+% To refer to elements in the text
+\newcommand{\ch}[1]{\ref{ch:#1}}
+\newcommand{\secc}[1]{\ref{sec:#1}}
+\newcommand{\fig}[1]{\ref{fig:#1}}
+\newcommand{\lst}[1]{\ref{lst:#1}}
+
+
+% Basic commands for elements
+\newcommand{\element}[1]{\texttt{#1}}
+\newcommand{\method}[1]{\texttt{#1}}
+\newcommand{\attribute}[1]{\texttt{#1}}
+\newcommand{\event}[1]{\texttt{\textbf{#1}}}
+\newcommand{\role}[1]{\texttt{\textbf{#1}}}
+\newcommand{\state}[1]{\textit{#1}}
+\newcommand{\action}[1]{\textit{#1}}
+\newcommand{\transition}[1]{\textit{#1}}
+
+% Abbreviations
+\newcommand{\el}[1]{\element{#1}}
+\newcommand{\ev}[1]{\event{#1}}
+\newcommand{\tr}[1]{\transition{#1}}
+\newcommand{\es}[1]{\state{#1}}
+\newcommand{\met}[1]{\method{#1}}
+\newcommand{\att}[1]{\attribute{#1}}
+\newcommand{\act}[1]{\action{#1}}
+
+% Commands for the development process
+\newcommand{\actP}[1]{#1} % ACTIVITIES
+\newcommand{\roleP}[1]{#1} % ROLES
+\newcommand{\art}[1]{#1} %ARTIFACTS
+\newcommand{\tool}{\texttt} % TOOLS
+
+% For embedded code
+\newcommand{\xml}[1]{\texttt{#1}}
+
+%Metamodels and tools
+\newcommand{\miniBPMN}{\texttt{MiniBPMN}}
+\newcommand{\XTM}{\texttt{XTM}}
+\newcommand{\obj}[1]{\textbf{#1}}
+\newcommand{\XPM}{\texttt{XPM}}
+\newcommand{{\CTF}}{\tool{CTF}}
+
+
+% DEFINE THE ``ownFigure'' command
+\newcommand{\ownFigure}[5]
+{
+\begin{figure}[#1] %  figure placement: here, top, bottom, or page
+   \centering
+   \includegraphics[width=#5\columnwidth]{images/#2} 
+   \caption{#4}
+   \label{fig:#3}
+\end{figure}
+}
+
+% List of Comentarios
+\newcommand{\listComentariosName}{Comentarios en el texto}
+\newlistof{comentarios}{comm}{\listComentariosName}
+
+
+% DEFINE THE ``comments'' ENVIRONMENT
+\ifthenelse {\boolean{showComments}}
+{
+		
+	\newenvironment{comments}[1][MS]
+	{
+		\singlespacing
+		\refstepcounter{comentarios}
+		\addcontentsline{comm}{comentarios}{ Comentarios en \thesection~-- #1}
+		\begin{center}
+		\begin{minipage}{0.99\columnwidth}
+		\begin{framed}
+		\begin{itshape}	[#1]
+	}
+	{
+		\end{itshape} 
+		\end{framed}
+		\end{minipage}
+		\end{center}
+	}
+}
+{
+	\excludecomment{comments}
+}
+
+% DEFINE THE ``TODO'' COMMAND
+\newcommand{\TODO}[2]
+{  
+	\refstepcounter{todos}
+		{\color{red}
+		{
+			\begin{center}
+				\begin{minipage}{0.9\columnwidth}
+					\footnotesize
+					\textbf{TODO \thetodos. #1:}
+					
+					\begin{ttfamily}
+					\begin{flushleft}
+					#2
+					\end{flushleft}
+					\end{ttfamily}			
+				\end{minipage}
+			\end{center}
+		 }}
+
+	\addcontentsline{todo}{todos}{ \thetodos:~\thesection~-- #1}
+}
+
+% List of TODOS
+\newcommand{\listTodosName}{Pending TODO}
+\newlistof{todos}{todo}{\listTodosName}
+
+\ifthenelse {\boolean{showTodos}}
+{}
+{
+	\renewcommand{\TODO}[2]{}
+}
+
+% DEFINE THE ``contribution'' ENVIRONMENT
+\newenvironment{contribution}[1]
+{
+	\begin{center}
+	\begin{minipage}{\columnwidth}
+	\begin{framed}
+	\begin{itemize} \item\textbf{#1}
+	
+}
+{
+	\end{itemize}
+	\end{framed}
+	\end{minipage}
+	\end{center}
+}
+
+
+% To display grammars
+\newcommand{\ccrule}[2]
+{ \begin{minipage}[t]{0.23\columnwidth}#1\end{minipage} &
+  ::= & 
+ 	\begin{minipage}[t]{0.63\columnwidth}
+	#2 \end{minipage}  \\ \hline}
+	
+\newcommand{\token}[1]{\texttt{\color{blue}#1}}
+\newcommand{\chars}[1]{\texttt{\textbf{\color{red}#1}}}
+
+\newcommand{\tokendef}[1]
+{\begin{minipage}{0.95\columnwidth}\texttt{#1}\end{minipage}}
